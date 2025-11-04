@@ -39,7 +39,7 @@ built entirely in **Python**, with an interactive CLI that lets you add, view, a
 Clone the repository and set up your environment:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/SvenScope.git
+git clone https://github.com/MR11Robot/SvenScope.git
 cd SvenScope
 py -m venv .venv
 source .venv/bin/activate   # On Windows: .venv\Scripts\activate
