@@ -23,7 +23,6 @@ def add_server():
     clear()
     print("➕ Add New Server\n")
 
-    # يدخل IP فقط أو IP:PORT
     raw_input = inquirer.text(
         message="Enter server IP (or IP:PORT):"
     ).execute().strip()
