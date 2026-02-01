@@ -41,6 +41,8 @@ ScaffoldingReadMe.txt
 *~
 CodeCoverage/
 servers.json
+build-release.bat
+publish/
 
 # MSBuild Binary and Structured Log
 *.binlog
