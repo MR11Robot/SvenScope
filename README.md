@@ -24,7 +24,7 @@ A lightweight command-line tool for tracking and monitoring Sven Co-op game serv
 
 ### Build from Source
 ```bash
-git clone https://github.com/YOUR_USERNAME/SvenScope.git
+git clone https://github.com/MR11Robot/SvenScope.git
 cd SvenScope
 dotnet build -c Release
 dotnet run
