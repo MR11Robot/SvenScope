@@ -1,86 +1,99 @@
-# 🛰️ SvenScope
+# SvenScope 🎮
 
-**SvenScope** is a simple and powerful **terminal-based tracker** for Sven Co-op servers —  
-built entirely in **Python**, with an interactive CLI that lets you add, view, and monitor servers easily.
+A lightweight command-line tool for tracking and monitoring Sven Co-op game servers in real-time.
 
----
+## Features
 
-## 📖 Table of Contents
+- **Server Management**: Add, list, and delete servers with ease
+- **Real-time Tracking**: Query servers to see live player counts and current maps
+- **Player Monitoring**: View all connected players on each server
+- **Persistent Storage**: Automatically saves your server list locally
+- **Clean Interface**: Simple, professional terminal UI
 
-1. [Features](#-features)
-2. [Tech Stack](#-tech-stack)
-3. [Installation](#%EF%B8%8F-installation)
-4. [Usage](#-usage)
-5. [Example Output](#-example-output)
+## Requirements
 
----
+- .NET 10.0 or higher
+- Windows, Linux, or macOS
 
-## 🚀 Features
+## Installation
 
-✅ Add new servers (supports both `IP` and `IP:PORT` formats)  
-✅ View all saved servers  
-✅ Query live server info (name, map, players, etc.)  
-✅ Data stored locally in `servers.json`  
-✅ Fully interactive menu using `InquirerPy`  
-✅ Works on **Windows**, **Linux**, and **macOS**
+### Download Release
+1. Download the latest release from [Releases](../../releases)
+2. Extract the ZIP file
+3. Run `SvenScope.exe` (Windows) or `./SvenScope` (Linux/macOS)
 
----
-
-## 🧰 Tech Stack
-
-- **Python 3.10+**
-- [`python-a2s`](https://pypi.org/project/python-a2s/) — for querying Sven Co-op servers  
-- [`InquirerPy`](https://github.com/kazhala/InquirerPy) — for a clean and interactive terminal interface  
-
----
-
-## ⚙️ Installation
-
-Clone the repository and set up your environment:
-
+### Build from Source
 ```bash
-git clone https://github.com/YOUR_USERNAME/SvenScope.git
+git clone https://github.com/MR11Robot/SvenScope.git
 cd SvenScope
-py -m venv .venv
-source .venv/bin/activate   # On Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+dotnet build -c Release
+dotnet run
 ```
+
+## Usage
+
+### Main Menu
+```
+═══════════════════════════════════════
+       SVEN CO-OP SERVER TRACKER
+═══════════════════════════════════════
+
+  1. Add new server
+  2. List saved servers
+  3. Delete server
+  4. Start tracking
+  5. Exit
+```
+
+### Adding a Server
+You can add servers in two ways:
+- **IP:PORT format**: `192.168.1.100:27015`
+- **IP only** (defaults to port 27015): `192.168.1.100`
+
+### Tracking Servers
+View real-time information including:
+- Server name and IP
+- Current map
+- Player count
+- List of connected players
+
+## Example Output
+
+```
+  Server: 192.168.1.100:27015
+  Name  : My Sven Co-op Server
+  Map   : sc_crossfire
+  Players: 5/16
+
+    01. Player1
+    02. Player2
+    03. Player3
+    04. Player4
+    05. Player5
+```
+
+## Technical Details
+
+- Uses **A2S_INFO** and **A2S_PLAYER** protocols for server queries
+- UDP-based communication with 3-second timeout
+- JSON-based local storage (`servers.json`)
+- Supports challenge-response authentication
+
+## Contributing
+
+Contributions are welcome! Feel free to:
+- Report bugs
+- Suggest new features
+- Submit pull requests
+
+## License
+
+This project is open source and available under the MIT License.
+
+## Author
+
+Made with ❤️ for the Sven Co-op community
 
 ---
 
-## 🕹️ Usage
-
-Run the tracker:
-
-```bash
-py tracker.py
-```
-
-Then choose one of the available options:
-
-- **Add new server** → Add by typing either `IP` or `IP:PORT`
-- **List saved servers** → Show all added servers
-- **Start tracking** → Query and display live status (map, players, etc.)
-- **Exit** → Close the app
-
----
-
-## 💾 Example Output
-
-```
-=======================================
-        🛰️  Sven Co-op Tracker
-=======================================
-
-🟢 Server: 150.20.108.197:1337
-🏷️  Name : Sven Co-op Public Server
-🗺️  Map  : svencoop1
-👥 Players (3/16)
-   01. Mr_Robot
-   02. SvenBot
-   03. Guest123
----------------------------------------
-
-✅ Query completed.
-```
-
+**Note**: This tool requires that the game servers have query protocol enabled.
