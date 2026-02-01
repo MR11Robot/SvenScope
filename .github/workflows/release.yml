@@ -1,0 +1,89 @@
+name: Release Build
+
+on:
+  push:
+    tags:
+      - 'v*'  # Triggers on version tags like v1.0.0
+
+jobs:
+  build:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+    
+    - name: Build Windows x64
+      run: |
+        dotnet publish -c Release -r win-x64 --self-contained \
+          -p:PublishSingleFile=true \
+          -p:IncludeNativeLibrariesForSelfExtract=true \
+          -o ./publish/win-x64
+    
+    - name: Build Linux x64
+      run: |
+        dotnet publish -c Release -r linux-x64 --self-contained \
+          -p:PublishSingleFile=true \
+          -p:IncludeNativeLibrariesForSelfExtract=true \
+          -o ./publish/linux-x64
+    
+    - name: Build macOS x64
+      run: |
+        dotnet publish -c Release -r osx-x64 --self-contained \
+          -p:PublishSingleFile=true \
+          -p:IncludeNativeLibrariesForSelfExtract=true \
+          -o ./publish/osx-x64
+    
+    - name: Package Windows build
+      run: |
+        cd ./publish/win-x64
+        zip -r ../../SvenScope-${{ github.ref_name }}-win-x64.zip SvenScope.exe
+        cd ../..
+    
+    - name: Package Linux build
+      run: |
+        cd ./publish/linux-x64
+        tar -czf ../../SvenScope-${{ github.ref_name }}-linux-x64.tar.gz SvenScope
+        cd ../..
+    
+    - name: Package macOS build
+      run: |
+        cd ./publish/osx-x64
+        tar -czf ../../SvenScope-${{ github.ref_name }}-osx-x64.tar.gz SvenScope
+        cd ../..
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          SvenScope-${{ github.ref_name }}-win-x64.zip
+          SvenScope-${{ github.ref_name }}-linux-x64.tar.gz
+          SvenScope-${{ github.ref_name }}-osx-x64.tar.gz
+        body: |
+          ## SvenScope ${{ github.ref_name }}
+          
+          ### Downloads
+          - **Windows**: `SvenScope-${{ github.ref_name }}-win-x64.zip`
+          - **Linux**: `SvenScope-${{ github.ref_name }}-linux-x64.tar.gz`
+          - **macOS**: `SvenScope-${{ github.ref_name }}-osx-x64.tar.gz`
+          
+          ### Installation
+          1. Download the appropriate file for your platform
+          2. Extract the archive
+          3. Run the executable
+          
+          ### Requirements
+          - .NET 10.0 Runtime (included in builds)
+          - Network access to game servers
+          
+          See [README.md](README.md) for full documentation.
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
