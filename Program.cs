@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -20,6 +21,7 @@ namespace SvenScope
         public string MapName { get; set; } = string.Empty;
         public int Players { get; set; }
         public int MaxPlayers { get; set; }
+        public long PingMs { get; set; }
     }
 
     public class A2SPlayer
@@ -295,6 +297,7 @@ namespace SvenScope
                     Console.WriteLine($"  Server: {server.Host}:{server.Port}");
                     Console.WriteLine($"  Name  : {info.ServerName}");
                     Console.WriteLine($"  Map   : {info.MapName}");
+                    Console.WriteLine($"  Ping  : {info.PingMs} ms");
                     Console.WriteLine($"  Players: {players.Count}/{info.MaxPlayers}");
 
                     if (players.Count > 0)
@@ -338,12 +341,17 @@ namespace SvenScope
             client.Connect(host, port);
 
             byte[] request = [0xFF, 0xFF, 0xFF, 0xFF, 0x54, 0x53, 0x6F, 0x75, 0x72, 0x63, 0x65, 0x20, 0x45, 0x6E, 0x67, 0x69, 0x6E, 0x65, 0x20, 0x51, 0x75, 0x65, 0x72, 0x79, 0x00];
+
+            var sw = System.Diagnostics.Stopwatch.StartNew();
             client.Send(request, request.Length);
 
             IPEndPoint remoteEP = new(IPAddress.Any, 0);
             byte[] response = client.Receive(ref remoteEP);
+            sw.Stop();
 
-            return ParseA2SInfo(response);
+            var info = ParseA2SInfo(response);
+            info.PingMs = sw.ElapsedMilliseconds;
+            return info;
         }
 
         static A2SInfo ParseA2SInfo(byte[] data)
